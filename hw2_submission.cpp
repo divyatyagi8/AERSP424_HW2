@@ -7,25 +7,6 @@
 
 using namespace std;
 
-vector<int> SCE_PHL; // define vectors
-vector<int> SCE_ORD;
-vector<int> SCE_EWR;
-
-void dist_PHL()
-{
-    SCE_PHL.push_back(160);
-}
-
-void dist_ORD()
-{
-    SCE_ORD.push_back(640);
-}
-
-void dist_EWR()
-{
-    SCE_EWR.push_back(220);
-}
-
 
 class Plane
 {
@@ -35,12 +16,10 @@ private:
     double pos, vel, distance, loiter_time;
     bool at_SCE = true;
     string origin, destination;
-    vector<int> SCE_PHL;
+    vector<int> SCE_PHL; // define vectors
     vector<int> SCE_ORD;
     vector<int> SCE_EWR;
-    double dist_PHL = SCE_PHL[0];
-    double dist_ORD = SCE_ORD[0];
-    double dist_EWR = SCE_EWR[0];
+    
 public:
 
     Plane() // default constructor
@@ -58,6 +37,7 @@ public:
     {
         origin = from;
         destination = to;
+        
         distance = calc_dist();
 
             pos = 0.0;
@@ -71,14 +51,17 @@ public:
     {
         if (origin == "SCE" && destination == "PHL")
         {
+            SCE_PHL.push_back(160);
             return SCE_PHL[0];
         }
         else if (origin == "SCE" && destination == "ORD")
         {
+            SCE_ORD.push_back(640);
             return SCE_ORD[0];
         }
         else if (origin == "SCE" && destination == "EWR")
         {
+            SCE_EWR.push_back(220);
             return SCE_EWR[0];
         }
         else
@@ -235,11 +218,11 @@ class GeneralAviation : public Plane
 class ATC {
 private:
     vector<Plane*> registered_planes;
-    const int MAX_LANDED_PLANE_NUM;
-    const int AIRSPACE_DISTANCE;
+    const int MAX_LANDED_PLANE_NUM = 2;
+    const int AIRSPACE_DISTANCE = 50;
 
 public:
-    ATC() : MAX_LANDED_PLANE_NUM(2), AIRSPACE_DISTANCE(50) {
+    ATC() {
         // Constructor sets the values for MAX_LANDED_PLANE_NUM and AIRSPACE_DISTANCE
     }
 
@@ -256,15 +239,47 @@ public:
             cout << "ATC: Maximum number of planes allowed to land has been reached." << endl;
         }
     }
+
+
+    void control_traffic()
+    {
+        int landed_planes = 0;
+        int i = 0;
+
+        for (Plane* a_plane : registered_planes) 
+        {
+            landed_planes += a_plane->getat_SCE();
+            i++;
+
+            //if statement to determine if landed planes is greater than or equal to the following will be set
+            if (landed_planes >= MAX_LANDED_PLANE_NUM) 
+            {
+                i = 0; //set i equal to zero
+
+                //for loop to determine if i is less than registered planes then the if stetment will be set
+                for (Plane* b_plane : registered_planes) 
+                {
+
+                    //if statement to set the loiter time and i++ values under specific conditions
+                    if (b_plane->getat_SCE() == 0 && b_plane->distance_to_SCE() <= ATC::AIRSPACE_DISTANCE && b_plane->getloiter_time() == 0) 
+                    {
+                        b_plane->setloiter_time(100);
+                        i++;
+                    }
+                }
+            }
+        }
+    }
 };
 
 
 
 int main()
 {
-    cout << SCE_PHL[0] << endl;
-    cout << SCE_ORD[0] << endl;
-    cout << SCE_EWR[0] << endl;
+
+   // cout << SCE_PHL[0] << endl;
+    //cout << SCE_ORD[0] << endl;
+   // cout << SCE_EWR[0] << endl;
 
 // Q5
     // Create an array of pointers to the base class
@@ -288,19 +303,26 @@ int main()
     aircraft[5]->setvel(160);
     aircraft[6]->setvel(180);
 
+
     // Simulation parameters
-    const double minTimeStep = 10.0;
-    const double maxTimeStep = 100.0;
+    const double timeStep = 100;
 
     double currentTime = 0.0;
     double endTime = 1440.0; // Simulation runs for 24 hours
 
+    ATC atc; // instantiate ATC object
+
+    for (int i = 0; i < num_aircraft; i++)
+    {
+        atc.register_plane(aircraft[i]);
+    }
+
     // print out pos of airplane at each time step
     while (currentTime < endTime) {
-        double timeStep = minTimeStep + (rand() / (double)RAND_MAX) * (maxTimeStep - minTimeStep);
-
+        
         for (int i = 0; i < num_aircraft; i++) {
             aircraft[i]->operate(timeStep);
+            atc.control_traffic();
             cout << "Type: " << aircraft[i]->plane_type() << " - Position: " << aircraft[i]->getpos() << " miles" << endl;
         }
 
