@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build hw2_submission",
+            "type": "shell",
+            "command": "gcc",
+            "args": ["-o", "hw2_submission", "hw2_submission.cpp", "-lSDL2"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

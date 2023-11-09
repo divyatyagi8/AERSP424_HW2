@@ -1,0 +1,11 @@
+/Users/divyatyagi/AERSP424_HW2/build/CMakeFiles/Homework2.dir
+/Users/divyatyagi/AERSP424_HW2/build/CMakeFiles/edit_cache.dir
+/Users/divyatyagi/AERSP424_HW2/build/CMakeFiles/rebuild_cache.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/sdl_headers_copy.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/SDL2main.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/SDL2.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/SDL2-static.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/SDL2_test.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/uninstall.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/edit_cache.dir
+/Users/divyatyagi/AERSP424_HW2/build/_deps/sdl2-build/CMakeFiles/rebuild_cache.dir

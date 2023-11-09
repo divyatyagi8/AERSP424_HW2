@@ -4,6 +4,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include "HW2_Visualizer.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ public:
         destination = to;
         distance = calc_dist(); // function to calc. distances between various airports
 
+        // initialize variables
             pos = 0.0;
             vel = 0.0;
             wait_time = 0.0;
@@ -41,7 +43,7 @@ public:
             at_SCE = false;
     }
 
-    double calc_dist()
+    double calc_dist() // create function to calculate distances
     {
         if (origin == "SCE" && destination == "PHL")
         {
@@ -232,6 +234,7 @@ public:
             registered_planes.push_back(plane);
         } else 
         {
+            //
         }
     }
 
@@ -240,20 +243,20 @@ public:
         int landed_planes = 0;
         int i = 0;
 
-        for (Plane* a_plane : registered_planes) 
+        for (Plane* plane1 : registered_planes) 
         {
-            landed_planes += a_plane->getat_SCE();
+            landed_planes += plane1->getat_SCE();
             i++;
 
             if (landed_planes >= MAX_LANDED_PLANE_NUM) 
             {
                 i = 0; // initialize i
 
-                for (Plane* b_plane : registered_planes) 
+                for (Plane* plane2 : registered_planes) 
                 {
-                    if (b_plane->getat_SCE() == 0 && b_plane->distance_to_SCE() <= ATC::AIRSPACE_DISTANCE && b_plane->getloiter_time() == 0) 
+                    if (plane2->getat_SCE() == 0 && plane2->distance_to_SCE() <= ATC::AIRSPACE_DISTANCE && plane2->getloiter_time() == 0) 
                     {
-                        b_plane->setloiter_time(100);
+                        plane2->setloiter_time(100);
                         i++;
                     }
                 }
@@ -294,7 +297,7 @@ public:
 
     const double timeStep = 100; // choose time step
     double currentTime = 0.0;
-    double endTime = 1440.0; // 24 hr sim
+    double endTime = 86400; // 24 hr simulation
 
     ATC atc; // instantiate ATC object
 
@@ -303,16 +306,22 @@ public:
         atc.register_plane(aircraft[i]);
     }
 
+    HW2_VIZ viz;
 
     while (currentTime < endTime) { // while statement
         for (int i = 0; i < num_aircraft; i++) {
             aircraft[i]->operate(timeStep);
             atc.control_traffic();
-            cout << "Type: " << aircraft[i]->plane_type() << " - Position: " << aircraft[i]->getpos() << " miles" << endl;
+           // cout << "Type: " << aircraft[i]->plane_type() << " - Position: " << aircraft[i]->getpos() << " miles" << endl;
+        // Call the visualize_plane function to display the plane on the map
+            viz.visualize_plane(aircraft[i]->plane_type(), aircraft[i]->getorigin(), aircraft[i]->getdestination(), aircraft[i]->getpos());
         }
+
+        // Call the update function to refresh the visualization
+        viz.update(timeStep);
+        SDL_PumpEvents();
 
         currentTime += timeStep;
     }
 
 }
-
