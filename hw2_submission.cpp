@@ -4,7 +4,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
-#include "HW2_Visualizer.h"
+// #include "HW2_Visualizer.h"
 
 using namespace std;
 
@@ -265,7 +265,7 @@ public:
     }
 };
 
- int main( int argc, char** argv ) 
+ int main(int argc, char** argv ) 
 {
 
     // cout << SCE_PHL[0] << endl; // cout statements for initial containers from Q1
@@ -295,7 +295,7 @@ public:
     aircraft[6]->setvel(0.05);
 
 
-    const double timeStep = 100; // choose time step
+    const double timeStep = 200; // choose time step
     double currentTime = 0.0;
     double endTime = 86400; // 24 hr simulation
 
@@ -306,20 +306,20 @@ public:
         atc.register_plane(aircraft[i]);
     }
 
-    HW2_VIZ viz;
+   // HW2_VIZ viz;
 
     while (currentTime < endTime) { // while statement
         for (int i = 0; i < num_aircraft; i++) {
             aircraft[i]->operate(timeStep);
             atc.control_traffic();
-           // cout << "Type: " << aircraft[i]->plane_type() << " - Position: " << aircraft[i]->getpos() << " miles" << endl;
+            cout << "Time: "<<currentTime<<" Type: " << aircraft[i]->plane_type() << " - Position: " << aircraft[i]->getpos() << " miles" << endl;
         // Call the visualize_plane function to display the plane on the map
-            viz.visualize_plane(aircraft[i]->plane_type(), aircraft[i]->getorigin(), aircraft[i]->getdestination(), aircraft[i]->getpos());
+            //viz.visualize_plane(aircraft[i]->plane_type(), aircraft[i]->getorigin(), aircraft[i]->getdestination(), aircraft[i]->getpos());
         }
 
         // Call the update function to refresh the visualization
-        viz.update(timeStep);
-        SDL_PumpEvents();
+       // viz.update(timeStep);
+       // SDL_PumpEvents();
 
         currentTime += timeStep;
     }
